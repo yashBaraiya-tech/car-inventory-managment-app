@@ -138,11 +138,6 @@ Charts are built using:
 ![Stock Distribution](screenshots/stock-distribution.png)
 
 
-## 🚘 Vehicle Management
-
-![Vehicles](screenshots/vehicles.png)
-
-
 ## ➕ Add Vehicle
 
 ![Add Vehicle](screenshots/add-vehicle.png)
