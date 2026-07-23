@@ -4,6 +4,8 @@ import {
   getVehicles,
   searchVehicles,
   deleteVehicle,
+  purchaseVehicle,
+  restockVehicle,
 } from "../services/vehicle.service";
 import { useAuth } from "../context/AuthContext";
 
@@ -29,6 +31,7 @@ const Vehicles = () => {
       setVehicles(res.data);
     } catch (error) {
       console.error(error);
+      alert("Failed to load vehicles");
     } finally {
       setLoading(false);
     }
@@ -58,9 +61,38 @@ const Vehicles = () => {
 
     try {
       await deleteVehicle(id);
+      alert("Vehicle deleted");
       loadVehicles();
     } catch (error) {
       alert(error.response?.data?.message || "Delete failed");
+    }
+  };
+
+  const handlePurchase = async (id) => {
+    const quantity = Number(prompt("Enter purchase quantity"));
+
+    if (!quantity || quantity <= 0) return;
+
+    try {
+      await purchaseVehicle(id, quantity);
+      alert("Purchase successful");
+      loadVehicles();
+    } catch (error) {
+      alert(error.response?.data?.message || "Purchase failed");
+    }
+  };
+
+  const handleRestock = async (id) => {
+    const quantity = Number(prompt("Enter restock quantity"));
+
+    if (!quantity || quantity <= 0) return;
+
+    try {
+      await restockVehicle(id, quantity);
+      alert("Restock successful");
+      loadVehicles();
+    } catch (error) {
+      alert(error.response?.data?.message || "Restock failed");
     }
   };
 
@@ -97,17 +129,11 @@ const Vehicles = () => {
           style={{ marginLeft: "10px" }}
         />
 
-        <button
-          onClick={handleSearch}
-          style={{ marginLeft: "10px" }}
-        >
+        <button onClick={handleSearch} style={{ marginLeft: "10px" }}>
           Search
         </button>
 
-        <button
-          onClick={handleReset}
-          style={{ marginLeft: "10px" }}
-        >
+        <button onClick={handleReset} style={{ marginLeft: "10px" }}>
           Reset
         </button>
       </div>
@@ -141,17 +167,33 @@ const Vehicles = () => {
                     <button>Edit</button>
                   </Link>
 
+                  <button
+                    onClick={() => handlePurchase(vehicle._id)}
+                    style={{ marginLeft: "5px" }}
+                  >
+                    Purchase
+                  </button>
+
                   {user?.role === "admin" && (
-                    <button
-                      onClick={() => handleDelete(vehicle._id)}
-                      style={{
-                        marginLeft: "10px",
-                        background: "red",
-                        color: "white",
-                      }}
-                    >
-                      Delete
-                    </button>
+                    <>
+                      <button
+                        onClick={() => handleRestock(vehicle._id)}
+                        style={{ marginLeft: "5px" }}
+                      >
+                        Restock
+                      </button>
+
+                      <button
+                        onClick={() => handleDelete(vehicle._id)}
+                        style={{
+                          marginLeft: "5px",
+                          background: "red",
+                          color: "white",
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </>
                   )}
                 </td>
               </tr>
