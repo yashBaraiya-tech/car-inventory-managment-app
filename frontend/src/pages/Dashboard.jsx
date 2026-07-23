@@ -3,8 +3,11 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import Vehicles from "./Vehicles";
 import StatCard from "../components/StatCard";
 import { getVehicles } from "../services/vehicle.service";
+import InventoryChart from "../components/InventoryChart";
 
 const Dashboard = () => {
+  const [vehicles, setVehicles] = useState([]);
+
   const [stats, setStats] = useState({
     totalVehicles: 0,
     totalStock: 0,
@@ -19,21 +22,23 @@ const Dashboard = () => {
   const loadStats = async () => {
     try {
       const res = await getVehicles();
-      const vehicles = res.data;
+      const vehicleData = res.data;
 
-      const totalVehicles = vehicles.length;
+      setVehicles(vehicleData);
 
-      const totalStock = vehicles.reduce(
+      const totalVehicles = vehicleData.length;
+
+      const totalStock = vehicleData.reduce(
         (sum, vehicle) => sum + vehicle.quantity,
         0
       );
 
-      const inventoryValue = vehicles.reduce(
+      const inventoryValue = vehicleData.reduce(
         (sum, vehicle) => sum + vehicle.price * vehicle.quantity,
         0
       );
 
-      const lowStock = vehicles.filter(
+      const lowStock = vehicleData.filter(
         (vehicle) => vehicle.quantity < 5
       ).length;
 
@@ -77,6 +82,8 @@ const Dashboard = () => {
       </div>
 
       <Vehicles />
+
+      <InventoryChart vehicles={vehicles} />
     </DashboardLayout>
   );
 };
