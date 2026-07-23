@@ -8,7 +8,7 @@ import { useAuth } from "../context/AuthContext";
 
 const Sidebar = () => {
   const location = useLocation();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   const menu = [
     {
@@ -16,12 +16,16 @@ const Sidebar = () => {
       icon: <FaChartBar />,
       path: "/dashboard",
     },
-    {
+  ];
+
+  // Add Vehicle only for admin
+  if (user?.role === "admin") {
+    menu.push({
       name: "Add Vehicle",
       icon: <FaPlus />,
       path: "/vehicles/add",
-    },
-  ];
+    });
+  }
 
   return (
     <aside className="w-64 bg-slate-900 text-white min-h-screen p-5">

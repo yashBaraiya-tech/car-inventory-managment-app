@@ -83,12 +83,7 @@ const VehicleTable = ({
 
               <td className="px-4 py-3">
                 <div className="flex justify-center gap-2">
-                  <button
-                    onClick={() => onEdit(vehicle._id)}
-                    className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded"
-                  >
-                    <FaEdit />
-                  </button>
+
 
                   <button
                     onClick={() => onPurchase(vehicle._id)}
@@ -99,6 +94,13 @@ const VehicleTable = ({
 
                   {user?.role === "admin" && (
                     <>
+                      <button
+                        onClick={() => onEdit(vehicle._id)}
+                        className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded"
+                      >
+                        <FaEdit />
+                      </button>
+                      
                       <button
                         onClick={() => onRestock(vehicle._id)}
                         className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded"
