@@ -10,6 +10,17 @@ const createVehicle = async (vehicleData) => {
   };
 };
 
+const getAllVehicles = async () => {
+  const vehicles = await Vehicle.find().sort({ createdAt: -1 });
+
+  return {
+    success: true,
+    count: vehicles.length,
+    data: vehicles,
+  };
+};
+
 module.exports = {
   createVehicle,
+  getAllVehicles,
 };
