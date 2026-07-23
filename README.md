@@ -248,6 +248,6 @@ car-dealership-inventory/
 ## Clone Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/yashBaraiya-tech/car-inventory-managment-app.git
 
 cd car-dealership-inventory
