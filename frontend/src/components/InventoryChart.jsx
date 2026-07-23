@@ -1,79 +1,106 @@
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  ArcElement,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
   Tooltip,
   Legend,
-} from "chart.js";
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
 
-import { Bar, Pie } from "react-chartjs-2";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  ArcElement,
-  Tooltip,
-  Legend
-);
+const COLORS = [
+  "#2563eb",
+  "#16a34a",
+  "#f59e0b",
+  "#dc2626",
+  "#9333ea",
+  "#0891b2",
+];
 
 const InventoryChart = ({ vehicles }) => {
-  const categoryMap = {};
+  const categoryData = Object.values(
+    vehicles.reduce((acc, vehicle) => {
+      if (!acc[vehicle.category]) {
+        acc[vehicle.category] = {
+          category: vehicle.category,
+          count: 0,
+        };
+      }
 
-  vehicles.forEach((vehicle) => {
-    categoryMap[vehicle.category] =
-      (categoryMap[vehicle.category] || 0) + 1;
-  });
+      // total stock by category
+      acc[vehicle.category].count += vehicle.quantity;
 
-  const barData = {
-    labels: Object.keys(categoryMap),
-    datasets: [
-      {
-        label: "Vehicles",
-        data: Object.values(categoryMap),
-        backgroundColor: "#2563eb",
-      },
-    ],
-  };
-
-  const pieData = {
-    labels: vehicles.map((v) => `${v.make} ${v.model}`),
-    datasets: [
-      {
-        data: vehicles.map((v) => v.quantity),
-        backgroundColor: [
-          "#3B82F6",
-          "#10B981",
-          "#F59E0B",
-          "#EF4444",
-          "#8B5CF6",
-          "#06B6D4",
-          "#EC4899",
-          "#84CC16",
-        ],
-      },
-    ],
-  };
+      return acc;
+    }, {})
+  );
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
-      <div className="bg-white p-5 rounded-xl shadow">
-        <h2 className="text-xl font-bold mb-4">
+    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 mt-8">
+
+      {/* Vehicles by Category */}
+      <div className="bg-white p-6 rounded-xl shadow">
+        <h2 className="text-xl font-bold mb-5">
           Vehicles by Category
         </h2>
 
-        <Bar data={barData} />
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={categoryData}>
+            <CartesianGrid strokeDasharray="3 3" />
+
+            <XAxis dataKey="category" />
+
+            <YAxis />
+
+            <Tooltip />
+
+            <Legend />
+
+            <Bar
+              dataKey="count"
+              name="Stock"
+              fill="#2563eb"
+            />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
 
-      <div className="bg-white p-5 rounded-xl shadow">
-        <h2 className="text-xl font-bold mb-4">
+
+      {/* Stock Distribution */}
+      <div className="bg-white p-6 rounded-xl shadow">
+        <h2 className="text-xl font-bold mb-5">
           Stock Distribution
         </h2>
 
-        <Pie data={pieData} />
+        <ResponsiveContainer width="100%" height={300}>
+          <PieChart>
+
+            <Pie
+              data={categoryData}
+              dataKey="count"
+              nameKey="category"
+              outerRadius={100}
+              label
+            >
+              {categoryData.map((entry, index) => (
+                <Cell
+                  key={index}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Pie>
+
+            <Tooltip />
+
+            <Legend />
+
+          </PieChart>
+        </ResponsiveContainer>
       </div>
+
     </div>
   );
 };

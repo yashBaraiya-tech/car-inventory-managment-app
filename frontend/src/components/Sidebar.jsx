@@ -1,6 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
 import {
-  FaCar,
   FaPlus,
   FaChartBar,
   FaSignOutAlt,
@@ -15,11 +14,6 @@ const Sidebar = () => {
     {
       name: "Dashboard",
       icon: <FaChartBar />,
-      path: "/dashboard",
-    },
-    {
-      name: "Vehicles",
-      icon: <FaCar />,
       path: "/dashboard",
     },
     {
