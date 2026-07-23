@@ -214,31 +214,28 @@ Charts are built using:
 - Postman
 
 ---
-
-# 📂 Project Structure
-
 car-dealership-inventory/
 ├── frontend/
 │   ├── src/
-│   │   ├── assets/          # Static assets & images
-│   │   ├── components/      # Shared UI components (Navbar, Sidebar, Charts)
-│   │   ├── context/         # Auth & Global state providers
-│   │   ├── layouts/         # Dashboard & Auth layouts
-│   │   ├── pages/           # Route views (Login, Dashboard, Vehicles)
-│   │   └── services/        # Axios API client setup
+│   │   ├── assets/       # Static assets & images
+│   │   ├── components/   # Shared UI components (Navbar, Sidebar, Charts)
+│   │   ├── context/      # Auth & Global state providers
+│   │   ├── layouts/      # Dashboard & Auth layouts
+│   │   ├── pages/        # Route views (Login, Dashboard, Vehicles)
+│   │   └── services/     # Axios API client setup
 │   └── package.json
 │
 ├── backend/
 │   ├── src/
-│   │   ├── config/          # Database configuration (db.js)
-│   │   ├── controllers/     # Route logic for auth & vehicles
-│   │   ├── middleware/      # JWT verify & RBAC middleware
-│   │   ├── models/          # Mongoose schemas (User, Vehicle)
-│   │   ├── routes/          # API route endpoints
-│   │   └── services/        # Business logic handlers
+│   │   ├── config/       # Database configuration (db.js)
+│   │   ├── controllers/  # Route logic for auth & vehicles
+│   │   ├── middleware/   # JWT verify & RBAC middleware
+│   │   ├── models/       # Mongoose schemas (User, Vehicle)
+│   │   ├── routes/       # API route endpoints
+│   │   └── services/     # Business logic handlers
 │   └── package.json
 │
-├── screenshots/             # Application previews
+├── screenshots/          # Application previews
 └── README.md
 
 
