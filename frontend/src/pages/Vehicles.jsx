@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   getVehicles,
+  searchVehicles,
   deleteVehicle,
 } from "../services/vehicle.service";
 import { useAuth } from "../context/AuthContext";
@@ -11,6 +12,12 @@ const Vehicles = () => {
 
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [filters, setFilters] = useState({
+    make: "",
+    model: "",
+    category: "",
+  });
 
   useEffect(() => {
     loadVehicles();
@@ -22,24 +29,35 @@ const Vehicles = () => {
       setVehicles(res.data);
     } catch (error) {
       console.error(error);
-      alert("Failed to load vehicles");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this vehicle?"
-    );
+  const handleSearch = async () => {
+    try {
+      const res = await searchVehicles(filters);
+      setVehicles(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-    if (!confirmDelete) return;
+  const handleReset = () => {
+    setFilters({
+      make: "",
+      model: "",
+      category: "",
+    });
+
+    loadVehicles();
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete this vehicle?")) return;
 
     try {
       await deleteVehicle(id);
-
-      alert("Vehicle deleted successfully");
-
       loadVehicles();
     } catch (error) {
       alert(error.response?.data?.message || "Delete failed");
@@ -51,6 +69,48 @@ const Vehicles = () => {
   return (
     <div>
       <h2>Vehicle Inventory</h2>
+
+      <div style={{ marginBottom: "20px" }}>
+        <input
+          placeholder="Make"
+          value={filters.make}
+          onChange={(e) =>
+            setFilters({ ...filters, make: e.target.value })
+          }
+        />
+
+        <input
+          placeholder="Model"
+          value={filters.model}
+          onChange={(e) =>
+            setFilters({ ...filters, model: e.target.value })
+          }
+          style={{ marginLeft: "10px" }}
+        />
+
+        <input
+          placeholder="Category"
+          value={filters.category}
+          onChange={(e) =>
+            setFilters({ ...filters, category: e.target.value })
+          }
+          style={{ marginLeft: "10px" }}
+        />
+
+        <button
+          onClick={handleSearch}
+          style={{ marginLeft: "10px" }}
+        >
+          Search
+        </button>
+
+        <button
+          onClick={handleReset}
+          style={{ marginLeft: "10px" }}
+        >
+          Reset
+        </button>
+      </div>
 
       {vehicles.length === 0 ? (
         <p>No vehicles found.</p>
@@ -82,19 +142,16 @@ const Vehicles = () => {
                   </Link>
 
                   {user?.role === "admin" && (
-                    <>
-                      {" "}
-                      <button
-                        onClick={() => handleDelete(vehicle._id)}
-                        style={{
-                          marginLeft: "10px",
-                          color: "white",
-                          background: "red",
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </>
+                    <button
+                      onClick={() => handleDelete(vehicle._id)}
+                      style={{
+                        marginLeft: "10px",
+                        background: "red",
+                        color: "white",
+                      }}
+                    >
+                      Delete
+                    </button>
                   )}
                 </td>
               </tr>
