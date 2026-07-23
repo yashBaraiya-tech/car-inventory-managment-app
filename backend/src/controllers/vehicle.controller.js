@@ -3,7 +3,6 @@ const vehicleService = require("../services/vehicle.service");
 const createVehicle = async (req, res) => {
   try {
     const result = await vehicleService.createVehicle(req.body);
-
     return res.status(201).json(result);
   } catch (error) {
     return res.status(400).json({
@@ -16,7 +15,6 @@ const createVehicle = async (req, res) => {
 const getAllVehicles = async (req, res) => {
   try {
     const result = await vehicleService.getAllVehicles();
-
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({
@@ -29,7 +27,6 @@ const getAllVehicles = async (req, res) => {
 const searchVehicles = async (req, res) => {
   try {
     const result = await vehicleService.searchVehicles(req.query);
-
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({
@@ -42,7 +39,6 @@ const searchVehicles = async (req, res) => {
 const updateVehicle = async (req, res) => {
   try {
     const result = await vehicleService.updateVehicle(req.params.id, req.body);
-
     return res.status(200).json(result);
   } catch (error) {
     return res.status(400).json({
@@ -55,6 +51,21 @@ const updateVehicle = async (req, res) => {
 const deleteVehicle = async (req, res) => {
   try {
     const result = await vehicleService.deleteVehicle(req.params.id);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const purchaseVehicle = async (req, res) => {
+  try {
+    const result = await vehicleService.purchaseVehicle(
+      req.params.id,
+      req.body.quantity
+    );
 
     return res.status(200).json(result);
   } catch (error) {
@@ -71,4 +82,5 @@ module.exports = {
   searchVehicles,
   updateVehicle,
   deleteVehicle,
+  purchaseVehicle,
 };

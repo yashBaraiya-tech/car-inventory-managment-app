@@ -7,6 +7,7 @@ const {
   searchVehicles,
   updateVehicle,
   deleteVehicle,
+  purchaseVehicle,
 } = require("../controllers/vehicle.controller");
 
 const authMiddleware = require("../middleware/auth.middleware");
@@ -20,11 +21,8 @@ router.get("/search", authMiddleware, searchVehicles);
 
 router.put("/:id", authMiddleware, updateVehicle);
 
-router.delete(
-  "/:id",
-  authMiddleware,
-  adminMiddleware,
-  deleteVehicle
-);
+router.delete("/:id", authMiddleware, adminMiddleware, deleteVehicle);
+
+router.post("/:id/purchase", authMiddleware, purchaseVehicle);
 
 module.exports = router;

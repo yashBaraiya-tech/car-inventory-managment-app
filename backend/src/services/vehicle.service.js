@@ -24,21 +24,12 @@ const getAllVehicles = async () => {
 const searchVehicles = async (query) => {
   const filter = {};
 
-  if (query.make) {
-    filter.make = { $regex: query.make, $options: "i" };
-  }
-
-  if (query.model) {
-    filter.model = { $regex: query.model, $options: "i" };
-  }
-
-  if (query.category) {
-    filter.category = { $regex: query.category, $options: "i" };
-  }
+  if (query.make) filter.make = { $regex: query.make, $options: "i" };
+  if (query.model) filter.model = { $regex: query.model, $options: "i" };
+  if (query.category) filter.category = { $regex: query.category, $options: "i" };
 
   if (query.minPrice || query.maxPrice) {
     filter.price = {};
-
     if (query.minPrice) filter.price.$gte = Number(query.minPrice);
     if (query.maxPrice) filter.price.$lte = Number(query.maxPrice);
   }
@@ -90,10 +81,41 @@ const deleteVehicle = async (id) => {
   };
 };
 
+const purchaseVehicle = async (id, quantity) => {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new Error("Invalid vehicle ID");
+  }
+
+  const vehicle = await Vehicle.findById(id);
+
+  if (!vehicle) {
+    throw new Error("Vehicle not found");
+  }
+
+  if (quantity <= 0) {
+    throw new Error("Purchase quantity must be greater than zero");
+  }
+
+  if (vehicle.quantity < quantity) {
+    throw new Error("Insufficient stock");
+  }
+
+  vehicle.quantity -= quantity;
+
+  await vehicle.save();
+
+  return {
+    success: true,
+    message: "Vehicle purchased successfully",
+    data: vehicle,
+  };
+};
+
 module.exports = {
   createVehicle,
   getAllVehicles,
   searchVehicles,
   updateVehicle,
   deleteVehicle,
+  purchaseVehicle,
 };
