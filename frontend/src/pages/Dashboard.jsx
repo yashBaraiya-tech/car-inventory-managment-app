@@ -1,5 +1,6 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import Vehicles from "./Vehicles";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -11,16 +12,32 @@ const Dashboard = () => {
   };
 
   return (
-    <div style={{ padding: "50px" }}>
-      <h1>Dashboard</h1>
+    <div style={{ padding: "20px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <div>
+          <h2>Welcome {user?.name}</h2>
+          <p>Role: {user?.role}</p>
+        </div>
 
-      <h2>Welcome {user?.name}</h2>
+        <button onClick={handleLogout}>Logout</button>
+      </div>
 
-      <p>Email: {user?.email}</p>
+      <hr />
 
-      <p>Role: {user?.role}</p>
+      <Link to="/vehicles/add">
+        <button>Add Vehicle</button>
+      </Link>
 
-      <button onClick={handleLogout}>Logout</button>
+      <br />
+      <br />
+
+      <Vehicles />
     </div>
   );
 };

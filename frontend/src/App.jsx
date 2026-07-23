@@ -3,8 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import AddVehicle from "./pages/AddVehicle";
 import NotFound from "./pages/NotFound";
-
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
@@ -20,6 +20,15 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/vehicles/add"
+          element={
+            <ProtectedRoute>
+              <AddVehicle />
             </ProtectedRoute>
           }
         />
