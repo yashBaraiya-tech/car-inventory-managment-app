@@ -5,6 +5,8 @@ import {
   FaBoxes,
 } from "react-icons/fa";
 
+const API_URL = import.meta.env.VITE_API_URL.replace("/api", "");
+
 const VehicleTable = ({
   vehicles,
   user,
@@ -14,10 +16,11 @@ const VehicleTable = ({
   onEdit,
 }) => {
   return (
-    <div className="bg-white rounded-xl shadow overflow-hidden">
+    <div className="bg-white rounded-xl shadow overflow-x-auto">
       <table className="w-full">
         <thead className="bg-slate-800 text-white">
           <tr>
+            <th className="px-4 py-3">Image</th>
             <th className="px-4 py-3 text-left">Make</th>
             <th className="px-4 py-3 text-left">Model</th>
             <th className="px-4 py-3 text-left">Category</th>
@@ -34,25 +37,37 @@ const VehicleTable = ({
               key={vehicle._id}
               className="border-b hover:bg-gray-50"
             >
-              <td className="px-4 py-4">{vehicle.make}</td>
-
-              <td className="px-4 py-4">{vehicle.model}</td>
-
-              <td className="px-4 py-4">
-                {vehicle.category}
+              <td className="px-4 py-3">
+                {vehicle.image ? (
+                  <img
+                    src={`${API_URL}${vehicle.image}`}
+                    alt={`${vehicle.make} ${vehicle.model}`}
+                    className="w-20 h-14 object-cover rounded"
+                  />
+                ) : (
+                  <div className="w-20 h-14 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500">
+                    No Image
+                  </div>
+                )}
               </td>
 
-              <td className="px-4 py-4 font-semibold">
-                ${vehicle.price.toLocaleString()}
+              <td className="px-4 py-3">{vehicle.make}</td>
+
+              <td className="px-4 py-3">{vehicle.model}</td>
+
+              <td className="px-4 py-3">{vehicle.category}</td>
+
+              <td className="px-4 py-3">
+                ${Number(vehicle.price).toLocaleString()}
               </td>
 
-              <td className="px-4 py-4 text-center">
+              <td className="px-4 py-3 text-center">
                 {vehicle.quantity}
               </td>
 
-              <td className="px-4 py-4 text-center">
+              <td className="px-4 py-3 text-center">
                 {vehicle.quantity === 0 ? (
-                  <span className="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm">
+                  <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
                     Out of Stock
                   </span>
                 ) : vehicle.quantity < 5 ? (
@@ -66,9 +81,8 @@ const VehicleTable = ({
                 )}
               </td>
 
-              <td className="px-4 py-4">
+              <td className="px-4 py-3">
                 <div className="flex justify-center gap-2">
-
                   <button
                     onClick={() => onEdit(vehicle._id)}
                     className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded"
@@ -100,7 +114,6 @@ const VehicleTable = ({
                       </button>
                     </>
                   )}
-
                 </div>
               </td>
             </tr>
