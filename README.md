@@ -214,6 +214,8 @@ Charts are built using:
 - Postman
 
 ---
+# Project Structure
+```text
 car-dealership-inventory/
 ├── frontend/
 │   ├── src/
@@ -237,7 +239,7 @@ car-dealership-inventory/
 │
 ├── screenshots/          # Application previews
 └── README.md
-
+```
 
 ---
 
