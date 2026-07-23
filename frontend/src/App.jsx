@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import AddVehicle from "./pages/AddVehicle";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
+import EditVehicle from "./pages/EditVehicle";
 
 function App() {
   return (
@@ -29,6 +30,15 @@ function App() {
           element={
             <ProtectedRoute>
               <AddVehicle />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/vehicles/edit/:id"
+          element={
+            <ProtectedRoute>
+              <EditVehicle />
             </ProtectedRoute>
           }
         />

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { getVehicles } from "../services/vehicle.service";
 
 const Vehicles = () => {
@@ -21,13 +22,11 @@ const Vehicles = () => {
     }
   };
 
-  if (loading) {
-    return <h2>Loading...</h2>;
-  }
+  if (loading) return <h2>Loading...</h2>;
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Vehicle Inventory</h1>
+    <div>
+      <h2>Vehicle Inventory</h2>
 
       {vehicles.length === 0 ? (
         <p>No vehicles found.</p>
@@ -40,6 +39,7 @@ const Vehicles = () => {
               <th>Category</th>
               <th>Price</th>
               <th>Quantity</th>
+              <th>Action</th>
             </tr>
           </thead>
 
@@ -51,6 +51,11 @@ const Vehicles = () => {
                 <td>{vehicle.category}</td>
                 <td>${vehicle.price}</td>
                 <td>{vehicle.quantity}</td>
+                <td>
+                  <Link to={`/vehicles/edit/${vehicle._id}`}>
+                    <button>Edit</button>
+                  </Link>
+                </td>
               </tr>
             ))}
           </tbody>
