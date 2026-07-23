@@ -6,9 +6,11 @@ const {
   getAllVehicles,
   searchVehicles,
   updateVehicle,
+  deleteVehicle,
 } = require("../controllers/vehicle.controller");
 
 const authMiddleware = require("../middleware/auth.middleware");
+const adminMiddleware = require("../middleware/admin.middleware");
 
 router.post("/", authMiddleware, createVehicle);
 
@@ -17,5 +19,12 @@ router.get("/", authMiddleware, getAllVehicles);
 router.get("/search", authMiddleware, searchVehicles);
 
 router.put("/:id", authMiddleware, updateVehicle);
+
+router.delete(
+  "/:id",
+  authMiddleware,
+  adminMiddleware,
+  deleteVehicle
+);
 
 module.exports = router;

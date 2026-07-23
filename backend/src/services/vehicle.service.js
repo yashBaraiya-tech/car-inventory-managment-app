@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Vehicle = require("../models/Vehicle");
 
 const createVehicle = async (vehicleData) => {
@@ -38,13 +39,8 @@ const searchVehicles = async (query) => {
   if (query.minPrice || query.maxPrice) {
     filter.price = {};
 
-    if (query.minPrice) {
-      filter.price.$gte = Number(query.minPrice);
-    }
-
-    if (query.maxPrice) {
-      filter.price.$lte = Number(query.maxPrice);
-    }
+    if (query.minPrice) filter.price.$gte = Number(query.minPrice);
+    if (query.maxPrice) filter.price.$lte = Number(query.maxPrice);
   }
 
   const vehicles = await Vehicle.find(filter);
@@ -57,6 +53,10 @@ const searchVehicles = async (query) => {
 };
 
 const updateVehicle = async (id, vehicleData) => {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new Error("Invalid vehicle ID");
+  }
+
   const vehicle = await Vehicle.findByIdAndUpdate(id, vehicleData, {
     new: true,
     runValidators: true,
@@ -73,9 +73,27 @@ const updateVehicle = async (id, vehicleData) => {
   };
 };
 
+const deleteVehicle = async (id) => {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new Error("Invalid vehicle ID");
+  }
+
+  const vehicle = await Vehicle.findByIdAndDelete(id);
+
+  if (!vehicle) {
+    throw new Error("Vehicle not found");
+  }
+
+  return {
+    success: true,
+    message: "Vehicle deleted successfully",
+  };
+};
+
 module.exports = {
   createVehicle,
   getAllVehicles,
   searchVehicles,
   updateVehicle,
+  deleteVehicle,
 };
