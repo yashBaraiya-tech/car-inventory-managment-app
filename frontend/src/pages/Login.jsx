@@ -35,36 +35,65 @@ const Login = () => {
   };
 
   return (
-    <div style={{ padding: "50px" }}>
-      <h1>Login</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-blue-900 to-black">
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-        />
+      <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl p-8">
 
-        <br />
-        <br />
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-800">
+            Welcome Back 🚗
+          </h1>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-        />
+          <p className="text-gray-500 mt-2">
+            Login to your dealership dashboard
+          </p>
+        </div>
 
-        <br />
-        <br />
 
-        <button type="submit">Login</button>
-      </form>
+        <form onSubmit={handleSubmit} className="space-y-5">
 
-      <br />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            value={formData.email}
+            onChange={handleChange}
+            className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+          />
 
-      <Link to="/register">Create Account</Link>
+
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+          />
+
+
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition"
+          >
+            Login
+          </button>
+
+        </form>
+
+
+        <p className="text-center mt-6 text-gray-600">
+          Don't have an account?{" "}
+          <Link
+            to="/register"
+            className="text-blue-600 font-semibold hover:underline"
+          >
+            Create Account
+          </Link>
+        </p>
+
+      </div>
+
     </div>
   );
 };
