@@ -243,7 +243,36 @@ car-dealership-inventory/
 
 ---
 
+---
 
+# 🧑‍💻 Development & Testing
+
+This project was developed with the assistance of AI tools (ChatGPT) for guidance, debugging, code improvements, and architectural suggestions.
+
+All application logic, implementation, integration, and testing were reviewed and customized during development.
+
+## 🧪 API Testing
+
+Backend APIs were tested using:
+
+- Postman
+- JWT authentication testing
+- CRUD operation testing
+- Error handling validation
+- Role-based access testing
+
+Testing included:
+
+- User registration
+- User login
+- Protected API routes
+- Admin authorization
+- Vehicle creation
+- Vehicle update
+- Vehicle deletion
+- Vehicle fetching
+
+---
 
 ## Clone Repository
 
