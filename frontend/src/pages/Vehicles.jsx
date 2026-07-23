@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   getVehicles,
   searchVehicles,
@@ -8,8 +8,10 @@ import {
   restockVehicle,
 } from "../services/vehicle.service";
 import { useAuth } from "../context/AuthContext";
+import VehicleTable from "../components/VehicleTable";
 
 const Vehicles = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
 
   const [vehicles, setVehicles] = useState([]);
@@ -56,6 +58,10 @@ const Vehicles = () => {
     loadVehicles();
   };
 
+  const handleEdit = (id) => {
+    navigate(`/vehicles/edit/${id}`);
+  };
+
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this vehicle?")) return;
 
@@ -100,10 +106,11 @@ const Vehicles = () => {
 
   return (
     <div>
-      <h2>Vehicle Inventory</h2>
+      <h2 className="text-2xl font-bold mb-4">Vehicle Inventory</h2>
 
-      <div style={{ marginBottom: "20px" }}>
+      <div className="flex flex-wrap gap-3 mb-6">
         <input
+          className="border rounded px-3 py-2"
           placeholder="Make"
           value={filters.make}
           onChange={(e) =>
@@ -112,28 +119,34 @@ const Vehicles = () => {
         />
 
         <input
+          className="border rounded px-3 py-2"
           placeholder="Model"
           value={filters.model}
           onChange={(e) =>
             setFilters({ ...filters, model: e.target.value })
           }
-          style={{ marginLeft: "10px" }}
         />
 
         <input
+          className="border rounded px-3 py-2"
           placeholder="Category"
           value={filters.category}
           onChange={(e) =>
             setFilters({ ...filters, category: e.target.value })
           }
-          style={{ marginLeft: "10px" }}
         />
 
-        <button onClick={handleSearch} style={{ marginLeft: "10px" }}>
+        <button
+          onClick={handleSearch}
+          className="bg-blue-600 text-white px-4 py-2 rounded"
+        >
           Search
         </button>
 
-        <button onClick={handleReset} style={{ marginLeft: "10px" }}>
+        <button
+          onClick={handleReset}
+          className="bg-gray-600 text-white px-4 py-2 rounded"
+        >
           Reset
         </button>
       </div>
@@ -141,65 +154,14 @@ const Vehicles = () => {
       {vehicles.length === 0 ? (
         <p>No vehicles found.</p>
       ) : (
-        <table border="1" cellPadding="10">
-          <thead>
-            <tr>
-              <th>Make</th>
-              <th>Model</th>
-              <th>Category</th>
-              <th>Price</th>
-              <th>Quantity</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {vehicles.map((vehicle) => (
-              <tr key={vehicle._id}>
-                <td>{vehicle.make}</td>
-                <td>{vehicle.model}</td>
-                <td>{vehicle.category}</td>
-                <td>${vehicle.price}</td>
-                <td>{vehicle.quantity}</td>
-
-                <td>
-                  <Link to={`/vehicles/edit/${vehicle._id}`}>
-                    <button>Edit</button>
-                  </Link>
-
-                  <button
-                    onClick={() => handlePurchase(vehicle._id)}
-                    style={{ marginLeft: "5px" }}
-                  >
-                    Purchase
-                  </button>
-
-                  {user?.role === "admin" && (
-                    <>
-                      <button
-                        onClick={() => handleRestock(vehicle._id)}
-                        style={{ marginLeft: "5px" }}
-                      >
-                        Restock
-                      </button>
-
-                      <button
-                        onClick={() => handleDelete(vehicle._id)}
-                        style={{
-                          marginLeft: "5px",
-                          background: "red",
-                          color: "white",
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <VehicleTable
+          vehicles={vehicles}
+          user={user}
+          onDelete={handleDelete}
+          onPurchase={handlePurchase}
+          onRestock={handleRestock}
+          onEdit={handleEdit}
+        />
       )}
     </div>
   );
