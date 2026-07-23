@@ -56,8 +56,26 @@ const searchVehicles = async (query) => {
   };
 };
 
+const updateVehicle = async (id, vehicleData) => {
+  const vehicle = await Vehicle.findByIdAndUpdate(id, vehicleData, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!vehicle) {
+    throw new Error("Vehicle not found");
+  }
+
+  return {
+    success: true,
+    message: "Vehicle updated successfully",
+    data: vehicle,
+  };
+};
+
 module.exports = {
   createVehicle,
   getAllVehicles,
   searchVehicles,
+  updateVehicle,
 };
