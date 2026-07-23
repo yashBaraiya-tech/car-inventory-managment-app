@@ -13,18 +13,40 @@ const {
 
 const authMiddleware = require("../middleware/auth.middleware");
 const adminMiddleware = require("../middleware/admin.middleware");
+const upload = require("../middleware/upload.middleware");
 
-router.post("/", authMiddleware, createVehicle);
+router.post(
+  "/",
+  authMiddleware,
+  adminMiddleware,
+  upload.single("image"),
+  createVehicle
+);
 
 router.get("/", authMiddleware, getAllVehicles);
 
 router.get("/search", authMiddleware, searchVehicles);
 
-router.put("/:id", authMiddleware, updateVehicle);
+router.put(
+  "/:id",
+  authMiddleware,
+  adminMiddleware,
+  upload.single("image"),
+  updateVehicle
+);
 
-router.delete("/:id", authMiddleware, adminMiddleware, deleteVehicle);
+router.delete(
+  "/:id",
+  authMiddleware,
+  adminMiddleware,
+  deleteVehicle
+);
 
-router.post("/:id/purchase", authMiddleware, purchaseVehicle);
+router.post(
+  "/:id/purchase",
+  authMiddleware,
+  purchaseVehicle
+);
 
 router.post(
   "/:id/restock",

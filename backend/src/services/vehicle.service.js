@@ -1,8 +1,11 @@
 const mongoose = require("mongoose");
 const Vehicle = require("../models/Vehicle");
 
-const createVehicle = async (vehicleData) => {
-  const vehicle = await Vehicle.create(vehicleData);
+const createVehicle = async (vehicleData, file) => {
+  const vehicle = await Vehicle.create({
+    ...vehicleData,
+    image: file ? `/uploads/${file.filename}` : "",
+  });
 
   return {
     success: true,
@@ -24,14 +27,26 @@ const getAllVehicles = async () => {
 const searchVehicles = async (query) => {
   const filter = {};
 
-  if (query.make) filter.make = { $regex: query.make, $options: "i" };
-  if (query.model) filter.model = { $regex: query.model, $options: "i" };
-  if (query.category) filter.category = { $regex: query.category, $options: "i" };
+  if (query.make)
+    filter.make = { $regex: query.make, $options: "i" };
+
+  if (query.model)
+    filter.model = { $regex: query.model, $options: "i" };
+
+  if (query.category)
+    filter.category = {
+      $regex: query.category,
+      $options: "i",
+    };
 
   if (query.minPrice || query.maxPrice) {
     filter.price = {};
-    if (query.minPrice) filter.price.$gte = Number(query.minPrice);
-    if (query.maxPrice) filter.price.$lte = Number(query.maxPrice);
+
+    if (query.minPrice)
+      filter.price.$gte = Number(query.minPrice);
+
+    if (query.maxPrice)
+      filter.price.$lte = Number(query.maxPrice);
   }
 
   const vehicles = await Vehicle.find(filter);
@@ -43,15 +58,27 @@ const searchVehicles = async (query) => {
   };
 };
 
-const updateVehicle = async (id, vehicleData) => {
+const updateVehicle = async (id, vehicleData, file) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     throw new Error("Invalid vehicle ID");
   }
 
-  const vehicle = await Vehicle.findByIdAndUpdate(id, vehicleData, {
-    new: true,
-    runValidators: true,
-  });
+  const updateData = {
+    ...vehicleData,
+  };
+
+  if (file) {
+    updateData.image = `/uploads/${file.filename}`;
+  }
+
+  const vehicle = await Vehicle.findByIdAndUpdate(
+    id,
+    updateData,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
 
   if (!vehicle) {
     throw new Error("Vehicle not found");
@@ -93,7 +120,9 @@ const purchaseVehicle = async (id, quantity) => {
   }
 
   if (quantity <= 0) {
-    throw new Error("Purchase quantity must be greater than zero");
+    throw new Error(
+      "Purchase quantity must be greater than zero"
+    );
   }
 
   if (vehicle.quantity < quantity) {
@@ -101,6 +130,7 @@ const purchaseVehicle = async (id, quantity) => {
   }
 
   vehicle.quantity -= quantity;
+
   await vehicle.save();
 
   return {
@@ -122,10 +152,13 @@ const restockVehicle = async (id, quantity) => {
   }
 
   if (quantity <= 0) {
-    throw new Error("Restock quantity must be greater than zero");
+    throw new Error(
+      "Restock quantity must be greater than zero"
+    );
   }
 
   vehicle.quantity += quantity;
+
   await vehicle.save();
 
   return {

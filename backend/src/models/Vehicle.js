@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const vehicleSchema = new mongoose.Schema(
   {
+    image: {
+      type: String,
+      default: "",
+    },
     make: {
       type: String,
       required: true,
