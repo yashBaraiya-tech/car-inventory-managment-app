@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getVehicles } from "../services/vehicle.service";
+import {
+  getVehicles,
+  deleteVehicle,
+} from "../services/vehicle.service";
+import { useAuth } from "../context/AuthContext";
 
 const Vehicles = () => {
+  const { user } = useAuth();
+
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -19,6 +25,24 @@ const Vehicles = () => {
       alert("Failed to load vehicles");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this vehicle?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await deleteVehicle(id);
+
+      alert("Vehicle deleted successfully");
+
+      loadVehicles();
+    } catch (error) {
+      alert(error.response?.data?.message || "Delete failed");
     }
   };
 
@@ -39,7 +63,7 @@ const Vehicles = () => {
               <th>Category</th>
               <th>Price</th>
               <th>Quantity</th>
-              <th>Action</th>
+              <th>Actions</th>
             </tr>
           </thead>
 
@@ -51,10 +75,27 @@ const Vehicles = () => {
                 <td>{vehicle.category}</td>
                 <td>${vehicle.price}</td>
                 <td>{vehicle.quantity}</td>
+
                 <td>
                   <Link to={`/vehicles/edit/${vehicle._id}`}>
                     <button>Edit</button>
                   </Link>
+
+                  {user?.role === "admin" && (
+                    <>
+                      {" "}
+                      <button
+                        onClick={() => handleDelete(vehicle._id)}
+                        style={{
+                          marginLeft: "10px",
+                          color: "white",
+                          background: "red",
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </>
+                  )}
                 </td>
               </tr>
             ))}
