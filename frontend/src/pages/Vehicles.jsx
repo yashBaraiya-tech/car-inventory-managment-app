@@ -9,6 +9,7 @@ import {
 } from "../services/vehicle.service";
 import { useAuth } from "../context/AuthContext";
 import VehicleTable from "../components/VehicleTable";
+import { toast } from "react-toastify";
 
 const Vehicles = () => {
   const navigate = useNavigate();
@@ -67,10 +68,10 @@ const Vehicles = () => {
 
     try {
       await deleteVehicle(id);
-      alert("Vehicle deleted");
+      toast.success("Vehicle deleted successfully");
       loadVehicles();
     } catch (error) {
-      alert(error.response?.data?.message || "Delete failed");
+     toast.error(error.response?.data?.message || "Delete failed");
     }
   };
 
@@ -81,10 +82,10 @@ const Vehicles = () => {
 
     try {
       await purchaseVehicle(id, quantity);
-      alert("Purchase successful");
+      toast.success("Purchase completed");
       loadVehicles();
     } catch (error) {
-      alert(error.response?.data?.message || "Purchase failed");
+     toast.error(error.response?.data?.message || "Purchase failed");
     }
   };
 
@@ -95,10 +96,10 @@ const Vehicles = () => {
 
     try {
       await restockVehicle(id, quantity);
-      alert("Restock successful");
+      toast.success("Vehicle restocked");
       loadVehicles();
     } catch (error) {
-      alert(error.response?.data?.message || "Restock failed");
+     toast.error(error.response?.data?.message || "Restock failed");
     }
   };
 
