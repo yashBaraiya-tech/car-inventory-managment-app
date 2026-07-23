@@ -101,12 +101,36 @@ const purchaseVehicle = async (id, quantity) => {
   }
 
   vehicle.quantity -= quantity;
-
   await vehicle.save();
 
   return {
     success: true,
     message: "Vehicle purchased successfully",
+    data: vehicle,
+  };
+};
+
+const restockVehicle = async (id, quantity) => {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new Error("Invalid vehicle ID");
+  }
+
+  const vehicle = await Vehicle.findById(id);
+
+  if (!vehicle) {
+    throw new Error("Vehicle not found");
+  }
+
+  if (quantity <= 0) {
+    throw new Error("Restock quantity must be greater than zero");
+  }
+
+  vehicle.quantity += quantity;
+  await vehicle.save();
+
+  return {
+    success: true,
+    message: "Vehicle restocked successfully",
     data: vehicle,
   };
 };
@@ -118,4 +142,5 @@ module.exports = {
   updateVehicle,
   deleteVehicle,
   purchaseVehicle,
+  restockVehicle,
 };
